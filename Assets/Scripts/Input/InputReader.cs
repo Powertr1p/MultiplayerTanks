@@ -2,23 +2,16 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[CreateAssetMenu(fileName = "New Input Reader", menuName = "Input/Input Reader")]
-public class InputReader : ScriptableObject, Controls.IPlayerActions
+public class InputReader : Controls.IPlayerActions
 {
     public event Action<bool> PrimaryFiring;
     public event Action<Vector2> Moving;
     
-    private Controls _controls;
-    
-    private void OnEnable()
+    public InputReader()
     {
-        if (ReferenceEquals(_controls, null))
-        {
-            _controls = new Controls();
-            _controls.Player.SetCallbacks(this);
-        }
-        
-        _controls.Player.Enable();
+        var controls = new Controls();
+        controls.Player.SetCallbacks(this);
+        controls.Player.Enable();
     }
 
     public void OnMove(InputAction.CallbackContext context)

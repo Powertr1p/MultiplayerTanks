@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Movement : NetworkBehaviour
 {
-    [SerializeField] private InputReader _inputReader;
     [SerializeField] private Transform _body;
     [SerializeField] private Rigidbody2D _rb;
 
@@ -12,7 +11,14 @@ public class Movement : NetworkBehaviour
     [SerializeField] private float _speed = 4f;
     [SerializeField] private float _turningRate = 30f;
 
+    private InputReader _inputReader;
+
     private Vector2 _lastInput;
+
+    private void Awake()
+    {
+        _inputReader = new InputReader();
+    }
 
     public override void OnNetworkSpawn()
     {
