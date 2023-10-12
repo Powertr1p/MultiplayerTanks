@@ -16,7 +16,7 @@ public class Movement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        float zRotation = _input.MovementInput.x * -_turningRate * Time.deltaTime;
+        float zRotation = _input.GetMovementInput().x * -_turningRate * Time.deltaTime;
         _body.Rotate(0f, 0f, zRotation);
     }
 
@@ -24,6 +24,6 @@ public class Movement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        _rb.velocity = _body.up * (_input.MovementInput.y * _speed);
+        _rb.velocity = _body.up * (_input.GetMovementInput().y * _speed);
     }
 }
