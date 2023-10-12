@@ -1,9 +1,10 @@
-using System;
+using Core.Player;
 using Unity.Netcode;
 using UnityEngine;
 
 public class Movement : NetworkBehaviour
 {
+    [SerializeField] private InputHandler _input;
     [SerializeField] private Transform _body;
     [SerializeField] private Rigidbody2D _rb;
 
@@ -11,34 +12,11 @@ public class Movement : NetworkBehaviour
     [SerializeField] private float _speed = 4f;
     [SerializeField] private float _turningRate = 30f;
 
-    private InputReader _inputReader;
-
-    private Vector2 _lastInput;
-
-    private void Awake()
-    {
-        _inputReader = new InputReader();
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        if (!IsOwner) return;
-
-        _inputReader.Moving += HandleMove;
-    }
-
-    public override void OnNetworkDespawn()
-    {
-        if (!IsOwner) return;
-
-        _inputReader.Moving -= HandleMove;
-    }
-
     private void Update()
     {
         if (!IsOwner) return;
 
-        float zRotation = _lastInput.x * -_turningRate * Time.deltaTime;
+        float zRotation = _input.MovementInput.x * -_turningRate * Time.deltaTime;
         _body.Rotate(0f, 0f, zRotation);
     }
 
@@ -46,11 +24,6 @@ public class Movement : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        _rb.velocity = _body.up * (_lastInput.y * _speed);
-    }
-
-    private void HandleMove(Vector2 input)
-    {
-        _lastInput = input;
+        _rb.velocity = _body.up * (_input.MovementInput.y * _speed);
     }
 }

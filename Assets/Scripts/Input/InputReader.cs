@@ -7,6 +7,8 @@ public class InputReader : Controls.IPlayerActions
     public event Action<bool> PrimaryFiring;
     public event Action<Vector2> Moving;
     
+    public Vector2 AimPosition { get; private set; }
+    
     public InputReader()
     {
         var controls = new Controls();
@@ -25,5 +27,10 @@ public class InputReader : Controls.IPlayerActions
             PrimaryFiring?.Invoke(true);
         else if (context.canceled)
             PrimaryFiring?.Invoke(false);
+    }
+
+    public void OnAim(InputAction.CallbackContext context)
+    {
+        AimPosition = context.ReadValue<Vector2>();
     }
 }
