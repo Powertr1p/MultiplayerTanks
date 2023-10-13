@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -5,6 +6,9 @@ namespace Core.Player
 {
     public class InputHandler : NetworkBehaviour
     {
+        public event Action PrimaryFireStart;
+        public event Action PrimaryFireEnd;
+        
         private Camera _camera;
         
         private InputReader _inputReader;
@@ -21,6 +25,17 @@ namespace Core.Player
             if (!IsOwner) return;
 
             _inputReader.Moving += HandleMove;
+            _inputReader.PrimaryFireButtonPressed += OnFireButtonPressed;
+            _inputReader.PrimaryFireButtonReleased += OnFireButtonReleased;
+        }
+        
+        public override void OnNetworkDespawn()
+        {
+            if (!IsOwner) return;
+
+            _inputReader.Moving -= HandleMove;
+            _inputReader.PrimaryFireButtonPressed -= OnFireButtonPressed;
+            _inputReader.PrimaryFireButtonReleased -= OnFireButtonReleased;
         }
 
         public Vector2 GetMovementInput()
@@ -34,17 +49,20 @@ namespace Core.Player
 
             return screenPosition;
         }
-
-        public override void OnNetworkDespawn()
-        {
-            if (!IsOwner) return;
-
-            _inputReader.Moving -= HandleMove;
-        }
         
         private void HandleMove(Vector2 input)
         {
             _lastMovementInput = input;
+        }
+
+        private void OnFireButtonPressed()
+        {
+            PrimaryFireStart?.Invoke();
+        }
+
+        private void OnFireButtonReleased()
+        {
+            PrimaryFireEnd?.Invoke();
         }
     }
 }

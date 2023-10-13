@@ -4,7 +4,8 @@ using UnityEngine.InputSystem;
 
 public class InputReader : Controls.IPlayerActions
 {
-    public event Action<bool> PrimaryFiring;
+    public event Action PrimaryFireButtonPressed;
+    public event Action PrimaryFireButtonReleased;
     public event Action<Vector2> Moving;
     
     public Vector2 AimPosition { get; private set; }
@@ -24,9 +25,9 @@ public class InputReader : Controls.IPlayerActions
     public void OnPrimaryFire(InputAction.CallbackContext context)
     {
         if (context.performed)
-            PrimaryFiring?.Invoke(true);
+            PrimaryFireButtonPressed?.Invoke();
         else if (context.canceled)
-            PrimaryFiring?.Invoke(false);
+            PrimaryFireButtonReleased?.Invoke();
     }
 
     public void OnAim(InputAction.CallbackContext context)
