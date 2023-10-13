@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5112523135979930677}
-  - component: {fileID: 2772456792756643842}
+  - component: {fileID: 7940761411663313555}
   m_Layer: 0
   m_Name: spr_shell
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1050873331963890274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2772456792756643842
+--- !u!212 &7940761411663313555
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.3828125, y: 0.5859375}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
