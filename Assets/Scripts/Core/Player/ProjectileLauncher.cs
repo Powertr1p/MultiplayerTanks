@@ -44,12 +44,15 @@ public class ProjectileLauncher : NetworkBehaviour
         
         if (!IsOwner) return;
         if (!_isFiring) return;
-
+        if (Time.time < (1 / _fireRate) + _previousFireTime) return;
+        
         var spawnPoint = _spawnPoint.position;
         var direction = _spawnPoint.up;
         
         PrimaryFireServerRpc(spawnPoint, direction);
         SpawnDummyProjectile(spawnPoint, direction);
+        
+        _previousFireTime = Time.time;
     }
 
     [ServerRpc]
