@@ -2,7 +2,6 @@ using Core.Player;
 using Unity.Netcode;
 using UnityEngine;
 
-
 public class ProjectileLauncher : NetworkBehaviour
 {
     [Header("References")]
@@ -10,11 +9,18 @@ public class ProjectileLauncher : NetworkBehaviour
     [SerializeField] private GameObject _clientProjectile;
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private InputHandler _input;
+    
+    [SerializeField] private GameObject _muzzleFlash;
+    [SerializeField] private Collider2D _playerCollider;
+    [SerializeField] private float _fireRate;
+    [SerializeField] private float _muzzleFlashDuration;
 
     [Header("Settings")] 
     [SerializeField] private float _speed;
 
     private bool _isFiring;
+    private float _previousFireTime;
+    private float _muzzleFlashTimer;
 
     public override void OnNetworkSpawn()
     {
@@ -34,18 +40,25 @@ public class ProjectileLauncher : NetworkBehaviour
 
     private void Update()
     {
+        TryDisableMuzzleFlash();
+        
         if (!IsOwner) return;
         if (!_isFiring) return;
+
+        var spawnPoint = _spawnPoint.position;
+        var direction = _spawnPoint.up;
         
-        PrimaryFireServerRpc(_spawnPoint.position, _spawnPoint.up);
-        SpawnDummyProjectile(_spawnPoint.position, _spawnPoint.up);
+        PrimaryFireServerRpc(spawnPoint, direction);
+        SpawnDummyProjectile(spawnPoint, direction);
     }
 
     [ServerRpc]
     private void PrimaryFireServerRpc(Vector3 spawnPosition, Vector3 direction)
     {
-        var instance = Instantiate(_serverProjectile, spawnPosition, Quaternion.identity);
-        instance.transform.up = direction;
+        var instance = SpawnProjectile(_serverProjectile, spawnPosition, direction);
+        
+        if (instance.TryGetComponent(out Rigidbody2D rb))
+            SetProjectileVelocity(rb);
         
         SpawnDummyProjectileClientRpc(spawnPosition, direction);
     }
@@ -60,10 +73,47 @@ public class ProjectileLauncher : NetworkBehaviour
 
     private void SpawnDummyProjectile(Vector3 spawnPosition, Vector3 direction)
     {
-        var instance = Instantiate(_clientProjectile, spawnPosition, Quaternion.identity);
-        instance.transform.up = direction;
+        EnableMuzzleFlash();
+        var instance = SpawnProjectile(_clientProjectile, spawnPosition, direction);
+        
+        if (instance.TryGetComponent(out Rigidbody2D rb))
+            SetProjectileVelocity(rb);
+    }
+
+    private void EnableMuzzleFlash()
+    {
+        _muzzleFlash.SetActive(true);
+        _muzzleFlashTimer = _muzzleFlashDuration;
     }
     
+    private void TryDisableMuzzleFlash()
+    {
+        if (_muzzleFlashTimer > 0f)
+        {
+            _muzzleFlashTimer -= Time.deltaTime;
+
+            if (_muzzleFlashTimer <= 0f)
+            {
+                _muzzleFlash.SetActive(false);
+            }
+        }
+    }
+
+    private GameObject SpawnProjectile(GameObject projectile, Vector3 spawnPosition, Vector3 direction)
+    {
+        var instance = Instantiate(projectile, spawnPosition, Quaternion.identity);
+        instance.transform.up = direction;
+        
+        Physics2D.IgnoreCollision(_playerCollider, instance.GetComponent<Collider2D>());
+
+        return instance;
+    }
+
+    private void SetProjectileVelocity(Rigidbody2D rb)
+    {
+        rb.velocity = rb.transform.up * _speed;
+    }
+
     private void FireProjectile()
     {
         _isFiring = true;
