@@ -44,7 +44,7 @@ public class ProjectileLauncher : NetworkBehaviour
         
         if (!IsOwner) return;
         if (!_isFiring) return;
-        if (Time.time < (1 / _fireRate) + _previousFireTime) return;
+        if (!CanFire()) return;
         
         var spawnPoint = _spawnPoint.position;
         var direction = _spawnPoint.up;
@@ -53,6 +53,11 @@ public class ProjectileLauncher : NetworkBehaviour
         SpawnDummyProjectile(spawnPoint, direction);
         
         _previousFireTime = Time.time;
+    }
+
+    private bool CanFire()
+    {
+        return !(Time.time < (1 / _fireRate) + _previousFireTime);
     }
 
     [ServerRpc]
