@@ -65,6 +65,9 @@ public class ProjectileLauncher : NetworkBehaviour
     {
         var instance = SpawnProjectile(_serverProjectile, spawnPosition, direction);
         
+        if (instance.TryGetComponent(out DamageDealer damageDealer))
+            damageDealer.SetOwner(OwnerClientId);
+        
         if (instance.TryGetComponent(out Rigidbody2D rb))
             SetProjectileVelocity(rb);
         

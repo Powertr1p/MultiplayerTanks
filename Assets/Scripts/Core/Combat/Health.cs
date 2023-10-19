@@ -8,10 +8,10 @@ public class Health : NetworkBehaviour, IDamagable
     public event Action<Health> OnDie;
 
     [SerializeField] private int _maxHealth = 100;
-    
-    public int MaxHealth => _maxHealth;
+
     public NetworkVariable<int> CurrentHealth => _currentHealth;
-    
+    public int MaxHealth => _maxHealth;
+
     private NetworkVariable<int> _currentHealth = new NetworkVariable<int>();
     private bool _isDead;
 
@@ -19,7 +19,7 @@ public class Health : NetworkBehaviour, IDamagable
     {
         if (!IsServer) return;
 
-        _currentHealth.Value = MaxHealth;
+        _currentHealth.Value = _maxHealth;
     }
 
     public void TakeDamage(int amount)
