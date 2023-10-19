@@ -7,12 +7,12 @@ public class Health : NetworkBehaviour, IDamagable
 {
     public event Action<Health> OnDie;
 
+    [SerializeField] private int _maxHealth = 100;
+    
     public int MaxHealth => _maxHealth;
     public NetworkVariable<int> CurrentHealth => _currentHealth;
-
-    [SerializeField] private int _maxHealth = 100;
+    
     private NetworkVariable<int> _currentHealth = new NetworkVariable<int>();
-
     private bool _isDead;
 
     public override void OnNetworkSpawn()
