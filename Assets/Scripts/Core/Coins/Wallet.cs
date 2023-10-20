@@ -18,4 +18,9 @@ public class Wallet : NetworkBehaviour
             Coins.Value += collectedCoin;
         }
     }
+
+    public void SpentCoins(int value)
+    {
+        Coins.Value -= value;
+    }
 }
