@@ -17,9 +17,8 @@ namespace Core.Player
         private void Awake()
         {
             _inputReader ??= new InputReader();
-            _camera = Camera.main;
         }
-        
+
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
@@ -41,6 +40,11 @@ namespace Core.Player
         public Vector2 GetMovementInput()
         {
             return _lastMovementInput;
+        }
+
+        public void BindSceneCamera()
+        {
+            _camera = Camera.main;
         }
 
         public Vector2 GetAimInput()
