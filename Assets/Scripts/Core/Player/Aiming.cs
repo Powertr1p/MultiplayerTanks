@@ -1,14 +1,14 @@
-using System;
 using Core.Player;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Aiming : NetworkBehaviour
 {
     [SerializeField] private InputHandler _input;
     [SerializeField] private Transform _turretTransform;
     [SerializeField] private NetworkInitializer _initializer;
+
+    private Camera _camera;
 
     private void OnEnable()
     {
@@ -26,13 +26,13 @@ public class Aiming : NetworkBehaviour
         if (!_initializer.IsInitialized) return;
 
         var turretPosition = _turretTransform.position;
-        var mousePosition = _input.GetAimInput();
+        var mousePosition = _input.GetAimInput(_camera);
 
         _turretTransform.up = new Vector2(mousePosition.x - turretPosition.x, mousePosition.y - turretPosition.y);
     }
 
     private void InitializePlayerToSceneReferences()
     {
-        _input.BindSceneCamera();
+        _camera = Camera.main;
     }
 }

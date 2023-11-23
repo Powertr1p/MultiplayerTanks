@@ -22,11 +22,13 @@ namespace Core.Player
         
         private void Initialize(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
         {
-            NetworkManager.Singleton.SceneManager.OnLoadComplete -= Initialize;
+            if (IsInitialized) return;
             
             OnPlayerInitialized?.Invoke();
             
             IsInitialized = true;
+            
+            NetworkManager.Singleton.SceneManager.OnLoadComplete -= Initialize;
         }
     }
 }

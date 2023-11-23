@@ -8,9 +8,7 @@ namespace Core.Player
     {
         public event Action PrimaryFireStart;
         public event Action PrimaryFireEnd;
-        
-        private Camera _camera;
-        
+
         private InputReader _inputReader;
         private Vector2 _lastMovementInput;
 
@@ -42,14 +40,9 @@ namespace Core.Player
             return _lastMovementInput;
         }
 
-        public void BindSceneCamera()
+        public Vector2 GetAimInput(Camera sceneCamera)
         {
-            _camera = Camera.main;
-        }
-
-        public Vector2 GetAimInput()
-        {
-            var screenPosition = _camera.ScreenToWorldPoint(_inputReader.AimPosition);
+            var screenPosition = sceneCamera.ScreenToWorldPoint(_inputReader.AimPosition);
 
             return screenPosition;
         }
