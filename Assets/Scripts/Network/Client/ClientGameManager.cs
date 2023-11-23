@@ -1,12 +1,26 @@
 using System.Threading.Tasks;
+using Network.Enums;
+using Unity.Services.Core;
+using UnityEngine.SceneManagement;
 
 namespace Network.Client
 {
     public class ClientGameManager
     {
-        public async Task InitAsync()
+        private const string LobbySceneName = "Lobby";
+        
+        public async Task<bool> InitAsync()
         {
-            //Auth player
+            await UnityServices.InitializeAsync();
+            
+            AuthState authState = await AuthWrapper.DoAuth();
+
+            return authState == AuthState.Authenticated;
+        }
+
+        public void ShowMenu()
+        {
+            SceneManager.LoadScene(LobbySceneName);
         }
     }
 }

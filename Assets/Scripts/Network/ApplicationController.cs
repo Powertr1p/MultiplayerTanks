@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -24,11 +22,16 @@ public class ApplicationController : MonoBehaviour
         }
         else
         {
-            var clientInstance = Instantiate(_clientPrefab);
-            await clientInstance.CreateClient();
-            
+            ClientSingleton clientInstance = Instantiate(_clientPrefab);
+            bool authenticated = await clientInstance.CreateClient();
+
             var hostInstance = Instantiate(_hostSingleton);
             hostInstance.CreateHost();
+
+            if (authenticated)
+            {
+                clientInstance.ClientManager.ShowMenu();
+            }
         }
     }
 }

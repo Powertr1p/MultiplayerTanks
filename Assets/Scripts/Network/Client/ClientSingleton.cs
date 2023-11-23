@@ -22,6 +22,8 @@ public class ClientSingleton : MonoBehaviour
             return _instance;
         }
     }
+
+    public ClientGameManager ClientManager => _client;
     
     private static ClientSingleton _instance;
     private ClientGameManager _client;
@@ -31,9 +33,9 @@ public class ClientSingleton : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async Task CreateClient()
+    public async Task<bool> CreateClient()
     {
         _client = new ClientGameManager();
-        await _client.InitAsync();
+        return await _client.InitAsync();
     }
 }
