@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using Network.Client;
 using UnityEngine;
 
 public class HostSingleton : MonoBehaviour
@@ -22,6 +20,8 @@ public class HostSingleton : MonoBehaviour
             return _instance;
         }
     }
+
+    public HostGameManager Host => _host;
     
     private static HostSingleton _instance;
     private HostGameManager _host;
@@ -33,6 +33,6 @@ public class HostSingleton : MonoBehaviour
 
     public void CreateHost()
     {
-        _host = new HostGameManager();
+       _host = new HostGameManager();
     }
 }
