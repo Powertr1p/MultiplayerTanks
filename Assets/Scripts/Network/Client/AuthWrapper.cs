@@ -1,6 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Network.Enums;
 using Unity.Services.Authentication;
+using Unity.Services.Core;
+using UnityEngine;
 
 public static class AuthWrapper
 {
@@ -10,27 +13,76 @@ public static class AuthWrapper
     
     public static async Task<AuthState> DoAuth(int maxTries = 5)
     {
-        if (AuthState == AuthState.Authenticated) 
-            return AuthState;
-
-        AuthState = AuthState.Authenticating;
-        int currentTry = 0;
-
-        while (AuthState == AuthState.Authenticating && currentTry < maxTries)
+        if (AuthState == AuthState.Authenticated)
         {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            return AuthState;
+        } 
+        
+        if (AuthState == AuthState.Authenticating)
+        {
+            Debug.LogWarning("Already authenticating!");
+            await Authenticating();
+            return AuthState;
+        }
+        
+        await SignInAnnonymously(maxTries);
+        
+        return AuthState;
+    }
 
-            if (AuthenticationService.Instance.IsSignedIn && AuthenticationService.Instance.IsAuthorized)
+    private static async Task<AuthState> Authenticating()
+    {
+        while (AuthState == AuthState.Authenticating || AuthState == AuthState.NotAuthenticated)
+        {
+            await Task.Delay(200);
+        }
+
+        return AuthState;
+    }
+
+    private static async Task SignInAnnonymously(int maxRetries)
+    {
+        AuthState = AuthState.Authenticating;
+        
+        int retries = 0;
+        
+        while (AuthState == AuthState.Authenticating && retries < maxRetries)
+        {
+            try
             {
-                AuthState = AuthState.Authenticated;
-                break;
-            }
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
-            currentTry++;
+                if (AuthenticationService.Instance.IsSignedIn && AuthenticationService.Instance.IsAuthorized)
+                {
+                    AuthState = AuthState.Authenticated;
+                    break;
+                }
+            }
+            catch (AuthenticationException authEx)
+            {
+                ThrowException(authEx);
+            }
+            catch (RequestFailedException reqEx)
+            {
+                ThrowException(reqEx);
+            }
+            
+            retries++;
             
             await Task.Delay(_taskDelayTime);
         }
 
-        return AuthState;
+        if (AuthState != AuthState.Authenticated)
+        {
+            Debug.LogWarning($"TimeOut authentication was raised after {retries} retries");
+            AuthState = AuthState.TimeOut;
+        }
+           
+    }
+
+    private static void ThrowException(Exception exception)
+    {
+        Debug.LogError(exception);
+        AuthState = AuthState.Error;
     }
 }
