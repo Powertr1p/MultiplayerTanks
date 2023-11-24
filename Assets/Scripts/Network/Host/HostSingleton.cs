@@ -22,7 +22,7 @@ public class HostSingleton : MonoBehaviour
     }
 
     public HostGameManager Host => _host;
-    
+
     private static HostSingleton _instance;
     private HostGameManager _host;
 

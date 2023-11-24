@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 
 public class HostGameManager
 {
+    public string JoinCode => _joinCode;
+
     private Allocation _allocation;
     private string _joinCode;
     

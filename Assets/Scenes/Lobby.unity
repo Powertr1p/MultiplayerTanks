@@ -1332,7 +1332,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b60d865e3dce94a18855e50a66570b85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _joinCode: {fileID: 1993227721}
   _hostButton: {fileID: 1060590822}
+  _clientButton: {fileID: 201271860}
 --- !u!1 &1750796823
 GameObject:
   m_ObjectHideFlags: 0

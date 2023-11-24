@@ -1,3 +1,4 @@
+using System;
 using Core.Player;
 using Unity.Netcode;
 using UnityEngine;
@@ -9,6 +10,16 @@ public class Aiming : NetworkBehaviour
     [SerializeField] private NetworkInitializer _initializer;
 
     private Camera _camera;
+    private bool _isInitialized;
+
+    private void Start()
+    {
+        if (!IsHost)
+        {
+            _camera = Camera.main;
+            _isInitialized = true;
+        }
+    }
 
     private void OnEnable()
     {
@@ -23,7 +34,7 @@ public class Aiming : NetworkBehaviour
     private void LateUpdate()
     {
         if (!IsOwner) return;
-        if (!_initializer.IsInitialized) return;
+        if (!_isInitialized) return;
 
         var turretPosition = _turretTransform.position;
         var mousePosition = _input.GetAimInput(_camera);
@@ -33,6 +44,9 @@ public class Aiming : NetworkBehaviour
 
     private void InitializePlayerToSceneReferences()
     {
+        Debug.Log("INIT");
+        _isInitialized = true;
+        
         _camera = Camera.main;
     }
 }
