@@ -1508,7 +1508,7 @@ MonoBehaviour:
   _joinCode: {fileID: 1993227721}
   _hostButton: {fileID: 1060590822}
   _clientButton: {fileID: 201271860}
-  _lobbyButton: {fileID: 0}
+  _lobbyButton: {fileID: 749348944}
   _lobby: {fileID: 669798876}
 --- !u!1 &1673820661
 GameObject:
