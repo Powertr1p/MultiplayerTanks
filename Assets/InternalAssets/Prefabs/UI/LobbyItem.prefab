@@ -400,6 +400,7 @@ GameObject:
   - component: {fileID: 8279110245946436020}
   - component: {fileID: 7315451041828261384}
   - component: {fileID: 8621507500020046509}
+  - component: {fileID: 7966387856020930997}
   m_Layer: 0
   m_Name: LobbyItem
   m_TagString: Untagged
@@ -467,6 +468,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7966387856020930997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5073941140318234911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b02f34310abd24ba2ae0a25462396d49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lobbyNameText: {fileID: 2070641850973624468}
+  _lobbyPlayersText: {fileID: 8428172059044002967}
+  _joinButton: {fileID: 2585470408042323225}
 --- !u!1 &6684340856712230854
 GameObject:
   m_ObjectHideFlags: 0

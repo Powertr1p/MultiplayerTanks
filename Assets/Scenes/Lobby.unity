@@ -873,6 +873,7 @@ GameObject:
   - component: {fileID: 669798875}
   - component: {fileID: 669798876}
   - component: {fileID: 669798877}
+  - component: {fileID: 669798878}
   m_Layer: 0
   m_Name: LobbyContainer
   m_TagString: Untagged
@@ -917,6 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _closeButton: {fileID: 957646081}
+  _refreshButton: {fileID: 664352077}
 --- !u!114 &669798877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -932,6 +934,21 @@ MonoBehaviour:
   _duration: 0.7
   _showEasing: 30
   _hideEasing: 32
+--- !u!114 &669798878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669798874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d82d468ea4d749af9f6428e287e6b17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lobbyItemParent: {fileID: 710866990}
+  _lobbyItem: {fileID: 7966387856020930997, guid: 7bdf9e6d5f5bf44c9b03612d7a5c9d75, type: 3}
+  _view: {fileID: 669798876}
 --- !u!1 &710866989
 GameObject:
   m_ObjectHideFlags: 0

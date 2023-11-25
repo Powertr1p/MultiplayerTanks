@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,9 @@ namespace UI
     public class LobbyView : MonoBehaviour
     {
         [SerializeField] private Button _closeButton;
+        [SerializeField] private Button _refreshButton;
+        
+        public event Action OnRefreshButtonClicked;
         
         private LobbyViewAnimation _animation;
 
@@ -21,11 +25,13 @@ namespace UI
         private void OnEnable()
         {
             _closeButton.onClick.AddListener(Hide);
+            _refreshButton.onClick.AddListener(RefreshClicked);
         }
 
         private void OnDisable()
         {
             _closeButton.onClick.RemoveListener(Hide);
+            _refreshButton.onClick.RemoveListener(RefreshClicked);
         }
 
         public void Show()
@@ -42,6 +48,11 @@ namespace UI
             {
                 gameObject.SetActive(false);
             });
+        }
+
+        private void RefreshClicked()
+        {
+            OnRefreshButtonClicked?.Invoke();
         }
     }
 }
