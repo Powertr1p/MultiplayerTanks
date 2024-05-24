@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
+using Network.Server;
+using Network.Shared;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
@@ -19,6 +22,8 @@ public class HostGameManager
     private Allocation _allocation;
     private string _joinCode;
     private string _lobbyId;
+
+    private NetworkServer _networkServer;
 
     private const int MaxConnections = 20;
     private const string GameSceneName = "Game";
@@ -61,19 +66,31 @@ public class HostGameManager
                 {
                     "JoinCode", new DataObject(DataObject.VisibilityOptions.Member, _joinCode)
                 }   
-            };
+            }; 
+            string playerName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Unknown"); 
             
-           Lobby lobby = await Lobbies.Instance.CreateLobbyAsync("My Lobby", MaxConnections, lobbyOptions);
-           _lobbyId = lobby.Id;
-
-           HostSingleton.Instance.StartCoroutine(HeartbeatLobby());
+            Lobby lobby = await Lobbies.Instance.CreateLobbyAsync( $"{playerName}'s Lobby", MaxConnections, lobbyOptions); 
+            _lobbyId = lobby.Id; 
+            
+            HostSingleton.Instance.StartCoroutine(HeartbeatLobby());
         }
         catch (LobbyServiceException e)
         {
             Debug.Log(e);
             return;
         }
+
+        _networkServer = new NetworkServer(NetworkManager.Singleton);
         
+        UserData userData = new UserData()
+        {
+            UserName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "Missing Name")
+        };
+
+        string payload = JsonUtility.ToJson(userData);
+        byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+        
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene(GameSceneName, LoadSceneMode.Single);
     }
